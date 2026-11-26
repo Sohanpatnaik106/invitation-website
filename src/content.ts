@@ -16,7 +16,7 @@ const resort = {
 export const wedding = {
   metadata: {
     title: 'An Invitation to Celebrate',
-    description: "An invitation to celebrate with our families. Open to discover what's inside.",
+    description: "Open to discover what's inside.",
     favicon: '/invitation-icon.svg',
     fallbackIcon: '/favicon.ico',
     image: '/media/celebration-awaits.jpg',

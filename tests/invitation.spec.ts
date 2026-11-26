@@ -21,7 +21,7 @@ test('sharing metadata keeps invitation details private before entry', async ({ 
     const head = await page.locator('head').innerHTML()
     expect(head).not.toMatch(/Aastha|Sohan|January|2027|Green Heaven|Bhubaneswar|aastheticsohlmates/i)
     for (const key of ['description', 'og:description', 'twitter:description']) {
-      await expect(page.locator(`meta[name="${key}"], meta[property="${key}"]`)).toHaveAttribute('content', "An invitation to celebrate with our families. Open to discover what's inside.")
+      await expect(page.locator(`meta[name="${key}"], meta[property="${key}"]`)).toHaveAttribute('content', "Open to discover what's inside.")
     }
     for (const key of ['og:title', 'twitter:title']) {
       await expect(page.locator(`meta[name="${key}"], meta[property="${key}"]`)).toHaveAttribute('content', 'An Invitation to Celebrate')
