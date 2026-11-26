@@ -85,7 +85,7 @@ export default function ScratchReveal({ onSave, onReveal, onContinue, countdown,
       }} onPointerMove={scratch} onPointerUp={finishStroke} onPointerCancel={finishStroke} onLostPointerCapture={finishStroke} />
       <div className="reveal-sparkles" aria-hidden="true">✦ <span>✧</span> ✦</div>
       <span ref={glint} className="scratch-glint" aria-hidden="true">✦ · ✧</span>
-    </div><div className="scratch-controls">{revealed ? <><span className="sr-only" role="status">30–31 January 2027. It’s a date!</span><button className="button primary" onClick={onSave}><CalendarDays size={16} /> Save the dates</button></> : <><span className="sr-only">{progress ? `${progress}% uncovered · keep going` : ''}</span><button className="button primary" onClick={revealDates}>Click to reveal dates <ArrowRight size={15} /></button></>}</div></div>
+    </div><div className="scratch-controls">{revealed ? <><span className="sr-only" role="status">30–31 January 2027. It’s a date!</span><button className="button primary" onClick={onSave}><CalendarDays size={16} /> Save the dates</button></> : <><span className="sr-only">{progress ? `${progress}% uncovered · keep going` : ''}</span><button className="button primary" onClick={revealDates}>Click to reveal the dates <ArrowRight size={15} /></button></>}</div></div>
     {onContinue && <div className={`section-next${revealed ? '' : ' reveal-pending'}`}><button className="button primary" disabled={!revealed} onClick={onContinue}>Next: the venue <ArrowRight size={18} /></button></div>}
   </section>
 }

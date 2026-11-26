@@ -220,17 +220,17 @@ async function watchTeaser(page: Page) {
 async function enter(page: Page, revealDates = true) {
   await openInvitation(page, '/')
   await page.getByRole('button', { name: 'Click to unfold the celebrations', exact: true }).click()
-  await page.getByRole('dialog').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('#scratch-title')).toBeFocused()
   await expect(page.locator('#home')).toHaveCount(1)
   await expect(page.locator('#story')).toHaveCount(0)
   await expect(page.locator('#scratch-title')).toBeInViewport()
-  if (revealDates) await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  if (revealDates) await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
 }
 
 async function celebrations(page: Page) {
   await venue(page)
-  await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
   await page.getByRole('button', { name: 'Next: celebrations', exact: true }).click()
   await expect(page.locator('#episodes')).toBeFocused()
 }
@@ -285,7 +285,7 @@ for (const [path, names] of [
     expect(await invitation.evaluate(element => element.scrollWidth <= element.clientWidth + 1)).toBe(true)
     await fullyInViewport(invitation.getByRole('button', { name: 'Close dialog', exact: true }))
     const brideSide = path === '/aastha'
-    const continueButton = invitation.getByRole('button', { name: brideSide ? 'Click to watch teaser' : 'Click to reveal dates', exact: true })
+    const continueButton = invitation.getByRole('button', { name: brideSide ? 'Click to watch teaser' : 'Click to reveal the dates', exact: true })
     await page.evaluate(() => document.fonts.ready)
     for (const viewport of [...phoneViewports, { width: 1440, height: 900 }]) {
       await page.setViewportSize(viewport)
@@ -327,7 +327,7 @@ for (const [path, names] of [
       await expect(page.locator('.invitation-preview')).toHaveCount(0)
       await fullyBelowHeader(page, page.locator('#scratch-title'))
     }
-    for (const name of ['Click to reveal dates', 'Next: the venue', 'Click to reveal venue', 'Next: celebrations', 'Next: warm regards']) {
+    for (const name of ['Click to reveal the dates', 'Next: the venue', 'Click to reveal the venue', 'Next: celebrations', 'Next: warm regards']) {
       await page.getByRole('button', { name, exact: true }).click()
     }
     const closing = page.locator('#warm-regards')
@@ -377,7 +377,7 @@ test('entrance and parents invitation keep dates and destination under wraps', a
   await expect(invitation).not.toContainText(/we request|our wedding|January|2027|Bhubaneswar|Green Heaven/)
   await expect(invitation.locator('.family-couple')).toContainText('Sohan')
   await expect(invitation.locator('.family-couple')).toContainText('Aastha')
-  await expect(invitation.getByRole('button', { name: 'Click to reveal dates' })).toBeVisible()
+  await expect(invitation.getByRole('button', { name: 'Click to reveal the dates' })).toBeVisible()
   await invitation.evaluate(element => { element.scrollTop = element.scrollHeight })
   await expect(page.getByRole('button', { name: 'Close dialog' })).toBeInViewport()
   await expect(page.getByRole('button', { name: 'Pause background music' })).toBeInViewport()
@@ -388,7 +388,7 @@ test('venue reveal unlocks forward scrolling; earlier sections remain accessible
   await enter(page, false)
   await expect(page.getByRole('button', { name: 'Next: celebrations', exact: true })).toHaveCount(0)
   await expect(page.locator('.episode-card, .countdown, #wardrobe, #venue')).toHaveCount(0)
-  await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('.countdown')).toBeVisible()
   await expect(page.locator('.episode-card, #episodes, #guest-guide, .finale')).toHaveCount(0)
   await expect(page.locator('#venue')).toHaveCount(1)
@@ -407,7 +407,7 @@ test('venue reveal unlocks forward scrolling; earlier sections remain accessible
   await expect.poll(() => page.evaluate(previous => scrollY < previous - 100, venueScroll)).toBe(true)
   await page.getByRole('button', { name: 'Next: the venue', exact: true }).click()
   await focusedSectionIsAligned(page, '#venue')
-  await page.getByRole('button', { name: 'Click to reveal venue' }).focus()
+  await page.getByRole('button', { name: 'Click to reveal the venue' }).focus()
   await page.keyboard.press('Enter')
   await expect(page.getByRole('link', { name: 'Get directions', exact: true })).toBeFocused()
   await expect(page.locator('#episodes, #guest-guide, .finale')).toHaveCount(2)
@@ -420,7 +420,7 @@ test('venue reveal unlocks forward scrolling; earlier sections remain accessible
   await page.getByRole('button', { name: 'Click to unfold the celebrations' }).click()
   await expect(page.getByRole('dialog')).not.toContainText(/January|2027/)
   await expect(page.getByRole('dialog')).toContainText('The Green Heaven Resort, Raghunathpur, Bhubaneswar, Odisha')
-  await expect(page.getByRole('dialog').getByRole('button', { name: 'Click to reveal dates', exact: true })).toBeVisible()
+  await expect(page.getByRole('dialog').getByRole('button', { name: 'Click to reveal the dates', exact: true })).toBeVisible()
 })
 
 test('inline teaser restores previously playing music on pause, end, scrolling away and section navigation', async ({ page }) => {
@@ -447,7 +447,7 @@ test('inline teaser restores previously playing music on pause, end, scrolling a
   await expect.poll(() => audio.evaluate((track: HTMLAudioElement) => !track.paused)).toBe(true)
   await playTeaser(page)
   await expect.poll(() => audio.evaluate((track: HTMLAudioElement) => track.paused)).toBe(true)
-  await page.getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('#scratch-title')).toBeFocused()
   await expect(video).toHaveCount(1)
   await expect.poll(() => video.evaluate((clip: HTMLVideoElement) => clip.paused)).toBe(true)
@@ -474,7 +474,7 @@ test('teaser respects music off and manual audio switching prevents overlap', as
   await expect.poll(() => video.evaluate((clip: HTMLVideoElement) => clip.ended)).toBe(true)
   expect(await audio.evaluate((track: HTMLAudioElement) => track.paused)).toBe(true)
   await playTeaser(page)
-  await page.getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('#scratch-title')).toBeFocused()
   expect(await audio.evaluate((track: HTMLAudioElement) => track.paused)).toBe(true)
 })
@@ -500,9 +500,9 @@ test('music starts only on click and persists through entry, navigation and dial
   await expect.poll(() => audio.evaluate((track: HTMLAudioElement) => !track.paused && track.currentTime >= 15)).toBe(true)
   await page.getByRole('button', { name: 'Continue without video', exact: true }).click()
   await page.getByRole('button', { name: 'Pause background music' }).click()
-  await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await page.getByRole('button', { name: 'Next: the venue', exact: true }).click()
-  await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
   await page.getByRole('button', { name: 'Next: celebrations', exact: true }).click()
   await page.getByRole('button', { name: '31 January', exact: true }).click()
   await page.getByRole('button', { name: 'Explore Ajab Haldi Ki Gazab Kahani' }).click()
@@ -894,7 +894,7 @@ test('maroon dates page fits before and after revealing on phones and desktop', 
       return bounds.left <= 1 && bounds.right >= document.documentElement.clientWidth - 1
     })).toBe(true)
     await fullyBelowHeader(page, page.locator('.scratch-card'))
-    await fullyBelowHeader(page, section.getByRole('button', { name: 'Click to reveal dates', exact: true }))
+    await fullyBelowHeader(page, section.getByRole('button', { name: 'Click to reveal the dates', exact: true }))
     await page.evaluate(() => document.fonts.ready)
     const positions = await section.locator('.scratch-copy, .scratch-card, .scratch-controls, .section-next').evaluateAll(elements => elements.map(element => {
       const bounds = element.getBoundingClientRect()
@@ -902,7 +902,7 @@ test('maroon dates page fits before and after revealing on phones and desktop', 
     }))
     await expect(page.locator('footer, .footer-hashtag')).toHaveCount(0)
     await expect(page.locator('.scratch-copy')).toHaveCSS('text-align', 'center')
-    await section.getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+    await section.getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
     await fullyBelowHeader(page, page.locator('.scratch-card'))
     await expect(section.getByRole('status')).toContainText('30–31 January 2027')
     await fullyBelowHeader(page, page.getByRole('button', { name: 'Save the dates', exact: true }))
@@ -925,7 +925,7 @@ test('maroon dates page fits before and after revealing on phones and desktop', 
 test('keyboard reveal and calendar download', async ({ page }) => {
   await enter(page, false)
   await expect(page.locator('.scratch-date')).toHaveAttribute('aria-hidden', 'true')
-  await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).focus()
+  await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).focus()
   await page.keyboard.press('Enter')
   await expect(page.locator('.scratch-section').getByRole('status')).toContainText('30–31 January 2027')
   await expect(page.locator('.scratch-date')).toHaveAttribute('aria-hidden', 'false')
@@ -970,7 +970,7 @@ test('invitation motion is finite and respects reduced motion', async ({ page })
     await expect(unfold).toHaveCSS('border-top-style', 'solid')
     await expect(unfold).toHaveCSS('animation-name', motion === 'reduce' ? 'none' : 'next-action-highlight')
     if (motion === 'no-preference') await expect(unfold).toHaveCSS('animation-iteration-count', '2')
-    await expect(page.getByRole('button', { name: 'Click to reveal dates', exact: true })).toHaveCSS('border-top-style', 'solid')
+    await expect(page.getByRole('button', { name: 'Click to reveal the dates', exact: true })).toHaveCSS('border-top-style', 'solid')
     const petals = page.locator('#dates .celebration-ornaments i')
     await expect(petals).toHaveCount(18)
     await expect(page.locator('#dates .shower-flower')).toHaveCount(3)
@@ -1014,7 +1014,7 @@ test('invitation motion is finite and respects reduced motion', async ({ page })
       await expect(page.locator('#hero-title')).toHaveCSS('opacity', '1')
       await expect(page.locator('#hero-title')).toHaveCSS('clip-path', 'none')
     }
-    await expect(page.getByRole('button', { name: 'Click to reveal dates', exact: true })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Click to reveal the dates', exact: true })).toBeVisible()
   }
 })
 
@@ -1072,11 +1072,11 @@ test('reduced motion and narrow screens remain usable', async ({ page }) => {
     }
   }
   await checkWidths('Hidden dates')
-  await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('.scratch-section').getByRole('status')).toContainText('It’s a date!')
   await checkWidths('Revealed dates')
   await page.getByRole('button', { name: 'Next: the venue', exact: true }).click()
-  await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
   await page.getByRole('button', { name: 'Next: celebrations', exact: true }).click()
   await checkWidths('Celebrations rail')
   await page.getByRole('button', { name: 'Explore Band Baaja Mehendi', exact: true }).click()
@@ -1092,7 +1092,7 @@ test('reduced motion and narrow screens remain usable', async ({ page }) => {
 
 test('formal family invitation and resort directions are present', async ({ page }) => {
   await venue(page)
-  await page.getByRole('button', { name: 'Click to reveal venue' }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue' }).click()
   await expect(page.locator('#venue')).toContainText('Raghunathpur, Bhubaneswar, Odisha')
   const contacts = page.locator('#warm-regards .regards-contacts')
   for (const [name, phone, href] of [
@@ -1154,10 +1154,10 @@ test('reveals accumulate in vertical order and scrolling down and back preserves
   await expect(page.locator('#teaser-title')).toBeInViewport()
   expect(await page.evaluate(() => scrollY)).toBeGreaterThan(0)
   await expect(page.getByRole('button', { name: 'Continue without video', exact: true })).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Click to reveal dates', exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Click to reveal the dates', exact: true })).toHaveCount(0)
   await playTeaser(page)
   await expect(page.getByRole('button', { name: 'Continue without video', exact: true })).toHaveCount(0)
-  await page.getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await cumulativeSections(3)
   await expect(shortcuts).toHaveCount(0)
   await focusedSectionIsAligned(page, '#scratch-title')
@@ -1165,7 +1165,7 @@ test('reveals accumulate in vertical order and scrolling down and back preserves
   const headerBeforeReveal = await page.locator('.site-header').evaluate(element => element.getBoundingClientRect().height)
   expect(scrollBeforeReveal).toBeGreaterThan(0)
   await expect(page.getByRole('button', { name: 'Next: celebrations', exact: true })).toHaveCount(0)
-  const reveal = page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true })
+  const reveal = page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true })
   await reveal.focus()
   await page.keyboard.press('Enter')
   await cumulativeSections(4)
@@ -1183,7 +1183,7 @@ test('reveals accumulate in vertical order and scrolling down and back preserves
   await expect(page.locator('#venue iframe')).toHaveCount(0)
   await page.getByRole('button', { name: 'Next: the venue', exact: true }).click()
   await focusedSectionIsAligned(page, '#venue')
-  await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
   await expect(page.getByRole('link', { name: 'Get directions', exact: true })).toBeFocused()
   await fullyBelowHeader(page, page.locator('#venue-title'))
   await expect(page.getByTitle('Google Map — Green Heaven Resort, Bhubaneswar')).toHaveCount(1)
@@ -1217,7 +1217,7 @@ test('venue map and navigation stay within one frame at intermediate and landsca
     await page.evaluate(() => document.fonts.ready)
     const frameBefore = await page.locator('#venue').boundingBox()
     for (const revealed of [false, true]) {
-      if (revealed) await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+      if (revealed) await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
       for (const locator of [page.locator('#venue-title'), page.locator('.venue-map'), page.locator('.venue-action')]) {
         await fullyBelowHeader(page, locator)
       }
@@ -1248,7 +1248,7 @@ for (const viewport of [
     await expect(page.locator('#dates')).toHaveClass(/scratch-section/)
     await focusedSectionIsAligned(page, '#scratch-title')
     const dates = page.locator('#dates')
-    const reveal = dates.getByRole('button', { name: 'Click to reveal dates', exact: true })
+    const reveal = dates.getByRole('button', { name: 'Click to reveal the dates', exact: true })
     for (const locator of [page.locator('#scratch-title'), dates.locator('.scratch-card'), reveal]) {
       await fullyBelowHeader(page, locator)
     }
@@ -1273,7 +1273,7 @@ for (const viewport of [
     await expect(page.locator('.venue-intro')).toHaveCSS('color', 'rgb(217, 185, 180)')
     await expect(page.locator('#episodes')).toHaveCount(0)
     await fullyBelowHeader(page, page.locator('#venue-title'))
-    const revealDestination = page.getByRole('button', { name: 'Click to reveal venue', exact: true })
+    const revealDestination = page.getByRole('button', { name: 'Click to reveal the venue', exact: true })
     await fullyBelowHeader(page, revealDestination)
     await expect(page.locator('.venue-intro')).toHaveText('Reveal the venue for the wedding celebrations.')
     await expect(page.locator('.venue-seal')).toBeVisible()
@@ -1496,7 +1496,7 @@ test('hero composition is unchanged when revisited after revealing dates', async
     }))
     await watchTeaser(page)
     await page.getByRole('button', { name: 'Continue without video', exact: true }).click()
-    await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+    await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
     await page.getByRole('button', { name: 'aastheticsohlmates home', exact: true }).click()
     await expect(page.locator('#home')).toBeFocused()
     await expect(page.getByRole('navigation', { name: 'Explore the invitation' })).toHaveCount(0)
@@ -1527,7 +1527,7 @@ test('scrolling remains continuous and date reveals do not change header height'
   await page.getByRole('button', { name: 'Continue without video', exact: true }).click()
   await focusedSectionIsAligned(page, '#scratch-title')
   const before = await page.evaluate(() => scrollY)
-  await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('.site-header')).toHaveCSS('height', `${headerHeight}px`)
   await expect(page.locator('.site-header nav')).toHaveCount(0)
   await expect.poll(() => headerControls.evaluateAll((elements, previous) => elements.every((element, index) => {
@@ -1537,7 +1537,7 @@ test('scrolling remains continuous and date reveals do not change header height'
   }), originalPositions)).toBe(true)
   expect(Math.abs(await page.evaluate(() => scrollY) - before)).toBeLessThan(4)
   await page.getByRole('button', { name: 'Next: the venue', exact: true }).click()
-  await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
   await page.getByRole('button', { name: 'Next: celebrations', exact: true }).click()
   await focusedSectionIsAligned(page, '#episodes')
   await page.mouse.wheel(0, 350)
@@ -1560,7 +1560,7 @@ test('teaser starts fullscreen from its play button', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Pause background music', exact: true })).toHaveCount(0)
   await page.evaluate(() => document.exitFullscreen())
   await video.evaluate((clip: HTMLVideoElement) => clip.pause())
-  await fullyInViewport(page.getByRole('button', { name: 'Click to reveal dates', exact: true }))
+  await fullyInViewport(page.getByRole('button', { name: 'Click to reveal the dates', exact: true }))
 })
 
 test('native video play control starts the teaser fullscreen', async ({ page }) => {
@@ -1574,7 +1574,7 @@ test('native video play control starts the teaser fullscreen', async ({ page }) 
   await expect.poll(() => video.evaluate((clip: HTMLVideoElement) => !clip.paused && clip.currentTime > 0)).toBe(true)
   await page.evaluate(() => document.exitFullscreen())
   await video.evaluate((clip: HTMLVideoElement) => clip.pause())
-  await fullyInViewport(page.getByRole('button', { name: 'Click to reveal dates', exact: true }))
+  await fullyInViewport(page.getByRole('button', { name: 'Click to reveal the dates', exact: true }))
 })
 
 test('teaser fullscreen rejection keeps inline playback available', async ({ page }) => {
@@ -1589,7 +1589,7 @@ test('teaser fullscreen rejection keeps inline playback available', async ({ pag
   await expect.poll(() => video.evaluate((clip: HTMLVideoElement) => !clip.paused && clip.currentTime > 0)).toBe(true)
   expect(await page.evaluate(() => document.fullscreenElement)).toBeNull()
   await expect(page.getByRole('status')).toHaveCount(0)
-  await page.getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('#scratch-title')).toBeFocused()
 })
 
@@ -1626,11 +1626,11 @@ test('unavailable inline teaser allows continuing without trapping guests', asyn
   await watchTeaser(page)
   await expect(page.locator('.journey-teaser').getByRole('status')).toHaveText('Video unavailable. Continue to the dates below.')
   await expect(page.getByRole('button', { name: 'Play teaser', exact: true })).toHaveCount(0)
-  await page.getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await expect(page.locator('#scratch-title')).toBeFocused()
-  await page.locator('#dates').getByRole('button', { name: 'Click to reveal dates', exact: true }).click()
+  await page.locator('#dates').getByRole('button', { name: 'Click to reveal the dates', exact: true }).click()
   await page.getByRole('button', { name: 'Next: the venue', exact: true }).click()
-  await page.getByRole('button', { name: 'Click to reveal venue', exact: true }).click()
+  await page.getByRole('button', { name: 'Click to reveal the venue', exact: true }).click()
   await page.getByRole('button', { name: 'Next: celebrations', exact: true }).click()
   await expect(page.locator('.episode-card')).toHaveCount(4)
 })
